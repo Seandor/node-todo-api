@@ -8,7 +8,7 @@ const {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose.js');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
-
+const {authenticate} = require('./middleware/authenticate');
 
 app = express();
 const port = process.env.PORT;
@@ -113,6 +113,9 @@ app.post('/users', (req, res) => {
   });
 });
 
+app.get('/users/me', authenticate, (req, res) => {
+  return res.send(req.user);
+});
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
