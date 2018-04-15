@@ -54,6 +54,16 @@ UserSchema.methods.generateAuthToken = function () {
   });
 }
 
+UserSchema.methods.removeToken = function (token) {
+  var user = this;
+  
+  return user.update({
+    $pull: {
+      tokens: { token }
+    }
+  });
+}
+
 UserSchema.statics.findByToken = function (token) {
   var User = this;
   var decoded;
@@ -64,8 +74,12 @@ UserSchema.statics.findByToken = function (token) {
     return Promise.reject('');
   }
 
+  // deleted token can still be verified and get user id
+  // so we need to add token in the query
   return User.findOne({
-    '_id': decoded._id
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
   });
 };
 
