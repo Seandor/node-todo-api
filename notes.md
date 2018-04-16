@@ -31,3 +31,8 @@ var token = {
 
 ### 测试
 功能点即测试点。
+
+
+### Async Functions
+2ality.com/2016/10/async-function-tips.html
+有些代码是无法用async去重写的，比如user model里面的findByCredentials方法，你不可能在bcrypt的回调里面去return或者throw什么，就算写了也没用。
